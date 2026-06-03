@@ -1,0 +1,18 @@
+services:
+  database:
+    build: ./database
+    container_name: tp-database
+
+  backend:
+    build: ./simple-api-student
+    container_name: simple-api-container
+    depends_on:
+      - database
+
+  http:
+    build: ./http-server
+    container_name: tp-http-server
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

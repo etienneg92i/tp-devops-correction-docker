@@ -1,0 +1,4 @@
+*.retry
+*.pem
+id_rsa
+.ansible/
