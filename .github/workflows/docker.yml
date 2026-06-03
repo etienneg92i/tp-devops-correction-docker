@@ -1,17 +1,12 @@
 name: Docker
 
 on:
-  workflow_run:
-    workflows:
-      - Tests
-    types:
-      - completed
+  push:
     branches:
       - main
 
 jobs:
   build-and-push-backend:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +22,6 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
 
   build-and-push-database:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +37,6 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-database:latest
 
   build-and-push-httpd:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +52,6 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
 
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     needs:
       - build-and-push-backend
       - build-and-push-database
