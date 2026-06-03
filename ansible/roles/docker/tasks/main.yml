@@ -33,3 +33,15 @@
     state: present
     update_cache: yes
 
+- name: Install python venv package
+  apt:
+    name: python3-venv
+    state: present
+
+- name: Create Docker Python virtual environment
+  command: python3 -m venv /opt/docker_venv
+  args:
+    creates: /opt/docker_venv
+
+- name: Install Docker SDK for Python
+  command: /opt/docker_venv/bin/pip install "docker<7"

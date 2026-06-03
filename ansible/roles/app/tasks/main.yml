@@ -1,2 +1,17 @@
 ---
-# tasks file for roles/app
+- name: Run simple-api container
+  community.docker.docker_container:
+    name: simple-api
+    image: neymarjr92/tp-devops-simple-api:latest
+    pull: true
+    state: started
+    restart_policy: unless-stopped
+
+    networks:
+      - name: app-network
+      - name: proxy-network
+
+    env:
+      SPRING_DATASOURCE_URL: "{{ spring_datasource_url }}"
+      SPRING_DATASOURCE_USERNAME: "{{ spring_datasource_username }}"
+      SPRING_DATASOURCE_PASSWORD: "{{ spring_datasource_password }}"
