@@ -1,0 +1,62 @@
+name: Docker
+
+on:
+  workflow_run:
+    workflows:
+      - Tests
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  build-and-push-backend:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./simple-api
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
+
+  build-and-push-database:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Build and push database image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./database
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-database:latest
+
+  build-and-push-httpd:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Build and push httpd image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./http-server
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest

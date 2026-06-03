@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 *.retry
 *.pem
 id_rsa
 .ansible/
+=======
+.idea
+>>>>>>> c493ee4e9c4a7157077b56d3a36b9c991f19b8f1
