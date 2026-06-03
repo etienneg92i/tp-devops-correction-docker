@@ -76,4 +76,6 @@ jobs:
 
       - name: Deploy with Ansible
         working-directory: ./ansible
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: false
         run: ansible-playbook -i inventories/setup.yml site.yml
